@@ -1,0 +1,24 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Articles — Admin{% endblock %}
+
+{% block admin_content %}
+<div class="admin-header-row">
+  <h1>Articles</h1>
+  <a href="{{ url_for('admin.article_new') }}" class="btn-primary">+ New Article</a>
+</div>
+<table class="admin-table">
+  <thead><tr><th>Title</th><th>Status</th><th>Views</th><th>Created</th></tr></thead>
+  <tbody>
+    {% for article in articles %}
+      <tr>
+        <td>{{ article.title }}</td>
+        <td><span class="badge badge-{{ article.status }}">{{ article.status }}</span></td>
+        <td>{{ article.view_count }}</td>
+        <td>{{ article.created_at.strftime('%Y-%m-%d') }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="4">No articles yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

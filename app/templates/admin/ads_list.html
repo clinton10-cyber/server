@@ -1,0 +1,49 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Ads — Admin{% endblock %}
+
+{% block admin_content %}
+<div class="admin-header-row">
+  <h1>Ads</h1>
+  <div style="display:flex; gap:10px;">
+    <a href="{{ url_for('admin.monetization_settings') }}" class="btn-ghost">Monetization Settings</a>
+    <a href="{{ url_for('admin.ad_new') }}" class="btn-primary">+ New Ad</a>
+  </div>
+</div>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>Name</th><th>Placement</th><th>Type</th><th>Priority</th>
+      <th>Impressions</th><th>Clicks</th><th>Status</th><th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for ad in ads %}
+      <tr>
+        <td>{{ ad.name }}</td>
+        <td>{{ ad.placement }}</td>
+        <td>{{ ad.ad_type }}</td>
+        <td>{{ ad.priority }}</td>
+        <td>{{ ad.impressions }}</td>
+        <td>{{ ad.clicks }}</td>
+        <td>
+          <span class="badge badge-{{ 'published' if ad.is_active else 'draft' }}">
+            {{ "Active" if ad.is_active else "Paused" }}
+          </span>
+        </td>
+        <td style="display:flex; gap:6px;">
+          <form method="POST" action="{{ url_for('admin.ad_toggle', ad_id=ad.id) }}">
+            <button type="submit" class="btn-ghost">{{ "Pause" if ad.is_active else "Activate" }}</button>
+          </form>
+          <form method="POST" action="{{ url_for('admin.ad_delete', ad_id=ad.id) }}"
+                onsubmit="return confirm('Delete this ad?');">
+            <button type="submit" class="btn-ghost">Delete</button>
+          </form>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="8">No ads configured yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

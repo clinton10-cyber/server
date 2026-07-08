@@ -1,0 +1,32 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Monetization Settings — Admin{% endblock %}
+
+{% block admin_content %}
+<h1>Monetization Settings</h1>
+<p>These values are read from your <code>.env</code> file and require a server restart to change.</p>
+
+<table class="admin-table">
+  <tbody>
+    <tr>
+      <td><strong>Google AdSense Client ID</strong><br>
+        <span class="meta">env: GOOGLE_ADSENSE_CLIENT_ID</span></td>
+      <td>{{ adsense_client_id or "Not configured" }}</td>
+    </tr>
+    <tr>
+      <td><strong>Mellowtel Config UUID</strong><br>
+        <span class="meta">env: MELLOWTEL_CONFIG_UUID</span></td>
+      <td>{{ mellowtel_config_uuid or "Not configured" }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 style="margin-top:30px;">How it works</h2>
+<ul>
+  <li>Both scripts are only loaded in the browser <strong>after</strong> a visitor accepts the cookie consent banner.</li>
+  <li>AdSense units placed via <a href="{{ url_for('admin.ads_list') }}">Ads</a> render inside the ad slots on the homepage and article pages once accepted.</li>
+  <li>Mellowtel requires its own separate opt-in per their terms — the same accept action covers both here, but you can split them if you want more granular consent.</li>
+  <li>To change these values, edit your <code>.env</code> file and restart the app.</li>
+</ul>
+
+<a href="{{ url_for('admin.ads_list') }}" class="btn-ghost">&larr; Back to Ads</a>
+{% endblock %}

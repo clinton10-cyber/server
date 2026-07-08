@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Clinton Tech — Technology News, Tutorials & Developer Resources{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <h1>Build. Learn. Ship.</h1>
+    <p>Technology news, coding tutorials, and developer resources — all in one place.</p>
+  </div>
+</section>
+
+{% set placement = "homepage_top" %}
+{% include "partials/ad_slot.html" %}
+
+<section class="container section">
+  <h2>Trending</h2>
+  <div class="card-grid">
+    {% for article in trending %}
+      <a class="card" href="{{ url_for('main.article_detail', slug=article.slug) }}">
+        <h3>{{ article.title }}</h3>
+        <p>{{ article.summary }}</p>
+        <span class="meta">{{ article.view_count }} views</span>
+      </a>
+    {% else %}
+      <p class="empty">No trending articles yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="container section">
+  <h2>Latest</h2>
+  <div class="card-grid">
+    {% for article in latest %}
+      <a class="card" href="{{ url_for('main.article_detail', slug=article.slug) }}">
+        <h3>{{ article.title }}</h3>
+        <p>{{ article.summary }}</p>
+      </a>
+    {% else %}
+      <p class="empty">No articles published yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="container section">
+  <h2>Featured</h2>
+  <div class="card-grid">
+    {% for article in featured %}
+      <a class="card featured" href="{{ url_for('main.article_detail', slug=article.slug) }}">
+        <h3>{{ article.title }}</h3>
+      </a>
+    {% else %}
+      <p class="empty">No featured articles yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="container section">
+  <h2>Categories</h2>
+  <div class="tag-row">
+    {% for category in categories %}
+      <a class="tag" href="{{ url_for('main.category_view', slug=category.slug) }}">{{ category.name }}</a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

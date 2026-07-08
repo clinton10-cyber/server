@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Sign Up — Clinton Tech{% endblock %}
+
+{% block content %}
+<section class="container auth-form">
+  <h1>Create your account</h1>
+  <form method="POST">
+    <label>Username</label>
+    <input type="text" name="username" required>
+    <label>Email</label>
+    <input type="email" name="email" required>
+    <label>Password</label>
+    <input type="password" name="password" required>
+    <button type="submit" class="btn-primary">Sign Up</button>
+  </form>
+  <p>Already have an account? <a href="{{ url_for('auth.login') }}">Login</a></p>
+</section>
+{% endblock %}

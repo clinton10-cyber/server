@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}{{ article.seo_title or article.title }} — Clinton Tech{% endblock %}
+{% block meta_description %}{{ article.seo_description or article.summary or "" }}{% endblock %}
+{% block og_title %}{{ article.title }}{% endblock %}
+{% block og_description %}{{ article.summary or "" }}{% endblock %}
+{% block og_image %}{% if article.featured_image %}<meta property="og:image" content="{{ article.featured_image }}">{% endif %}{% endblock %}
+
+{% block content %}
+<article class="container article-detail">
+  <h1>{{ article.title }}</h1>
+  <p class="meta">By {{ article.author.username }} · {{ article.reading_time_minutes }} min read · {{ article.view_count }} views</p>
+  {% if article.featured_image %}
+    <img src="{{ article.featured_image }}" alt="{{ article.title }}" class="featured-image">
+  {% endif %}
+  <div class="article-body">
+    {{ article.content | safe }}
+  </div>
+
+  {% set placement = "article_bottom" %}
+  {% include "partials/ad_slot.html" %}
+
+  <div class="tag-row">
+    {% for tag in article.tags %}
+      <a class="tag" href="{{ url_for('main.tag_view', slug=tag.slug) }}">{{ tag.name }}</a>
+    {% endfor %}
+  </div>
+
+  <div class="engagement-row">
+    {% if current_user.is_authenticated %}
+      <form method="POST" action="{{ url_for('main.like_article', slug=article.slug) }}">
+        <button type="submit" class="btn-ghost {% if has_liked(article.id) %}active{% endif %}">
+          👍 {{ article.like_count }} {% if has_liked(article.id) %}Liked{% else %}Like{% endif %}
+        </button>
+      </form>
+      <form method="POST" action="{{ url_for('main.bookmark_article', slug=article.slug) }}">
+        <button type="submit" class="btn-ghost {% if has_bookmarked(article.id) %}active{% endif %}">
+          {% if has_bookmarked(article.id) %}🔖 Bookmarked{% else %}🔖 Bookmark{% endif %}
+        </button>
+      </form>
+    {% else %}
+      <p class="meta">
+        <a href="{{ url_for('auth.login') }}">Log in</a> to like, bookmark, or comment.
+      </p>
+    {% endif %}
+  </div>
+
+  <section class="comments-section">
+    <h2>Comments ({{ article.comments.count() }})</h2>
+    {% if current_user.is_authenticated %}
+      <form method="POST" action="{{ url_for('main.add_comment', slug=article.slug) }}" class="comment-form">
+        <textarea name="content" rows="3" placeholder="Add a comment..." required></textarea>
+        <button type="submit" class="btn-primary">Post Comment</button>
+      </form>
+    {% endif %}
+
+    <div class="comment-list">
+      {% for comment in top_level_comments %}
+        <div class="comment">
+          <p class="comment-meta">{{ comment.user.username }} · {{ comment.created_at.strftime('%Y-%m-%d') }}</p>
+          <p>{{ comment.content }}</p>
+        </div>
+      {% else %}
+        <p class="empty">No comments yet. Be the first to comment.</p>
+      {% endfor %}
+    </div>
+  </section>
+</article>
+
+<section class="container section">
+  <h2>Related</h2>
+  <div class="card-grid">
+    {% for rel in related %}
+      <a class="card" href="{{ url_for('main.article_detail', slug=rel.slug) }}">
+        <h3>{{ rel.title }}</h3>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

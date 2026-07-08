@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}My Bookmarks — Clinton Tech{% endblock %}
+
+{% block content %}
+<section class="container section">
+  <h1>My Bookmarks</h1>
+  <div class="card-grid">
+    {% for article in articles %}
+      <a class="card" href="{{ url_for('main.article_detail', slug=article.slug) }}">
+        <h3>{{ article.title }}</h3>
+        <p>{{ article.summary }}</p>
+      </a>
+    {% else %}
+      <p class="empty">You haven't bookmarked anything yet.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

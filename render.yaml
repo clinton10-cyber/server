@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: clinton-tech
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn run:app"
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: clinton-tech-db
+          property: connectionString
+      - key: MEDIA_DATABASE_URL
+        fromDatabase:
+          name: clinton-tech-media-db
+          property: connectionString
+      - key: GOOGLE_ADSENSE_CLIENT_ID
+        value: ""
+      - key: MELLOWTEL_CONFIG_UUID
+        value: ""
+
+databases:
+  - name: clinton-tech-db
+    plan: free
+  - name: clinton-tech-media-db
+    plan: free

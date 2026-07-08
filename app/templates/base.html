@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Clinton Tech{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}Technology news, coding tutorials, and developer resources.{% endblock %}">
+  <meta property="og:title" content="{% block og_title %}Clinton Tech{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}Technology news, coding tutorials, and developer resources.{% endblock %}">
+  {% block og_image %}{% endblock %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% if adsense_client_id %}
+  <meta name="google-adsense-account" content="{{ adsense_client_id }}">
+  {% endif %}
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="{{ url_for('main.home') }}" class="logo">Clinton<span>Tech</span></a>
+      <nav class="main-nav">
+        <a href="{{ url_for('main.home') }}">Home</a>
+        <a href="#">Tutorials</a>
+        <a href="#">Challenges</a>
+        <a href="#">AI Tools</a>
+        <a href="#">Resources</a>
+        {% for p in nav_pages %}
+          <a href="{{ url_for('pages.view_page', slug=p.slug) }}">{{ p.title }}</a>
+        {% endfor %}
+      </nav>
+      <form class="search-form" action="{{ url_for('main.search') }}" method="GET">
+        <input type="search" name="q" placeholder="Search articles..." value="{{ request.args.get('q', '') }}">
+      </form>
+      <div class="header-actions">
+        {% if whatsapp_group_link %}
+          <a href="{{ whatsapp_group_link }}" target="_blank" rel="noopener" class="btn-whatsapp">💬 Join WhatsApp</a>
+        {% endif %}
+        <button id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+        {% if current_user.is_authenticated %}
+          {% if current_user.is_author %}
+            <a href="{{ url_for('admin.dashboard') }}" class="btn-ghost">Admin</a>
+          {% endif %}
+          <a href="{{ url_for('auth.logout') }}" class="btn-ghost">Logout</a>
+        {% else %}
+          <a href="{{ url_for('auth.login') }}" class="btn-ghost">Login</a>
+          <a href="{{ url_for('auth.register') }}" class="btn-primary">Sign Up</a>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="container flash-messages">
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; {{ current_year }} Clinton Tech. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Cookie consent banner: gates Mellowtel + Google AdSense until the visitor accepts -->
+  <div id="cookie-consent-banner" class="cookie-consent hidden">
+    <p>
+      We use cookies to run ads and, if you opt in, to share a small amount
+      of your idle bandwidth via <strong>Mellowtel</strong> to help keep
+      this site free. See our
+      <a href="{{ url_for('pages.view_page', slug='privacy-policy') }}">Privacy Policy</a>.
+    </p>
+    <div class="cookie-consent-actions">
+      <button id="cookie-decline" class="btn-ghost">Decline</button>
+      <button id="cookie-accept" class="btn-primary">Accept</button>
+    </div>
+  </div>
+
+  <script>
+    window.CLINTON_TECH_CONFIG = {
+      adsenseClientId: {{ adsense_client_id|tojson }},
+      mellowtelConfigUuid: {{ mellowtel_config_uuid|tojson }}
+    };
+  </script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/consent.js') }}"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

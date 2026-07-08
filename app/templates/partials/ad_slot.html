@@ -1,0 +1,13 @@
+{# Usage: {% include "partials/ad_slot.html" with context %} after setting {% set placement = "homepage_top" %} #}
+{% for ad in get_ads(placement) %}
+  <div class="ad-slot" data-ad-id="{{ ad.id }}">
+    <div class="ad-label">Sponsored</div>
+    {% if ad.ad_type == "image" and ad.image_url %}
+      <a href="{{ ad.link_url or '#' }}" target="_blank" rel="noopener sponsored">
+        <img src="{{ ad.image_url }}" alt="{{ ad.name }}">
+      </a>
+    {% elif ad.html_snippet %}
+      {{ ad.html_snippet | safe }}
+    {% endif %}
+  </div>
+{% endfor %}

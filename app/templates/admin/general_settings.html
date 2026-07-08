@@ -1,0 +1,24 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}General Settings — Admin{% endblock %}
+
+{% block admin_content %}
+<h1>General Settings</h1>
+<form method="POST" class="admin-form">
+  <label>WhatsApp Community Group Link</label>
+  <input type="text" name="whatsapp_group_link" value="{{ whatsapp_group_link }}"
+         placeholder="https://chat.whatsapp.com/xxxxxxxxxxxx">
+  <p class="meta">Shown as a "Join WhatsApp" button in the site header when set.</p>
+
+  <button type="submit" class="btn-primary">Save Settings</button>
+</form>
+
+<h2 style="margin-top:30px;">Database</h2>
+<p class="meta">
+  This app uses a single <code>DATABASE_URL</code> environment variable for its
+  Postgres connection — it works identically whether that URL points to a
+  plain Postgres instance (e.g. on Render) or a Supabase Postgres connection
+  string (found in your Supabase project under Settings → Database →
+  Connection string). No code changes are needed to switch between them,
+  just update <code>DATABASE_URL</code> and restart.
+</p>
+{% endblock %}

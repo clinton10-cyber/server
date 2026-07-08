@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Admin — Clinton Tech{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <a href="{{ url_for('main.home') }}" class="logo">Clinton<span>Tech</span></a>
+      <nav>
+        <a href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('admin.articles_list') }}">Articles</a>
+        <a href="{{ url_for('admin.pages_list') }}">Pages</a>
+        <a href="{{ url_for('admin.users_list') }}">Users</a>
+        <a href="{{ url_for('admin.ads_list') }}">Ads</a>
+        <a href="{{ url_for('admin.general_settings') }}">Settings</a>
+        <a href="{{ url_for('auth.logout') }}">Logout</a>
+      </nav>
+    </aside>
+    <main class="admin-main">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      {% block admin_content %}{% endblock %}
+    </main>
+  </div>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}New Ad — Admin{% endblock %}
+
+{% block admin_content %}
+<h1>New Ad</h1>
+<form method="POST" class="admin-form">
+  <label>Name</label>
+  <input type="text" name="name" required placeholder="e.g. AdSense - Homepage Top">
+
+  <label>Placement</label>
+  <select name="placement" required>
+    {% for p in placements %}
+      <option value="{{ p }}">{{ p }}</option>
+    {% endfor %}
+  </select>
+
+  <label>Type</label>
+  <select name="ad_type" id="ad-type-select">
+    <option value="html">HTML / Script snippet (e.g. AdSense unit)</option>
+    <option value="image">Image + link (sponsored banner)</option>
+  </select>
+
+  <div id="html-fields">
+    <label>HTML / JS Snippet</label>
+    <textarea name="html_snippet" rows="6" placeholder="&lt;ins class=&quot;adsbygoogle&quot; ...&gt;&lt;/ins&gt;"></textarea>
+  </div>
+
+  <div id="image-fields">
+    <label>Image URL</label>
+    <input type="text" name="image_url" placeholder="https://...">
+    <label>Link URL</label>
+    <input type="text" name="link_url" placeholder="https://...">
+  </div>
+
+  <label>Priority (higher shows first)</label>
+  <input type="number" name="priority" value="0">
+
+  <label class="checkbox-label">
+    <input type="checkbox" name="is_active" checked> Active
+  </label>
+
+  <button type="submit" class="btn-primary">Save Ad</button>
+</form>
+
+<script>
+  const typeSelect = document.getElementById("ad-type-select");
+  const htmlFields = document.getElementById("html-fields");
+  const imageFields = document.getElementById("image-fields");
+
+  function updateFields() {
+    const isImage = typeSelect.value === "image";
+    htmlFields.style.display = isImage ? "none" : "block";
+    imageFields.style.display = isImage ? "block" : "none";
+  }
+  typeSelect.addEventListener("change", updateFields);
+  updateFields();
+</script>
+{% endblock %}

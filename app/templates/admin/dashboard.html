@@ -1,0 +1,29 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}Dashboard — Admin{% endblock %}
+
+{% block admin_content %}
+<h1>Dashboard</h1>
+<div class="stat-grid">
+  <div class="stat-card"><span>{{ stats.total_articles }}</span><p>Total Articles</p></div>
+  <div class="stat-card"><span>{{ stats.published_articles }}</span><p>Published</p></div>
+  <div class="stat-card"><span>{{ stats.draft_articles }}</span><p>Drafts</p></div>
+  <div class="stat-card"><span>{{ stats.total_users }}</span><p>Users</p></div>
+  <div class="stat-card"><span>{{ stats.total_pages }}</span><p>Pages</p></div>
+</div>
+
+<h2>Recent Articles</h2>
+<table class="admin-table">
+  <thead><tr><th>Title</th><th>Status</th><th>Created</th></tr></thead>
+  <tbody>
+    {% for article in recent_articles %}
+      <tr>
+        <td>{{ article.title }}</td>
+        <td><span class="badge badge-{{ article.status }}">{{ article.status }}</span></td>
+        <td>{{ article.created_at.strftime('%Y-%m-%d') }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="3">No articles yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
