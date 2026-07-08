@@ -67,6 +67,8 @@ def article_new():
             seo_description=request.form.get("seo_description") or request.form.get("summary"),
         )
 
+        db.session.add(article)
+
         tag_names = [t.strip() for t in request.form.get("tags", "").split(",") if t.strip()]
         for name in tag_names:
             tag_slug = slugify(name)
@@ -81,7 +83,6 @@ def article_new():
 
             article.published_at = datetime.utcnow()
 
-        db.session.add(article)
         db.session.commit()
         flash("Article created.", "success")
         return redirect(url_for("admin.articles_list"))
