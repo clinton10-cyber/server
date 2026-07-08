@@ -19,9 +19,8 @@ def create_app():
         "DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/clinton_tech"
     )
     app.config["SQLALCHEMY_BINDS"] = {
-        "media": os.environ.get(
-            "MEDIA_DATABASE_URL",
-            os.environ.get("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/clinton_tech"),
+        "media": os.environ.get("MEDIA_DATABASE_URL") or os.environ.get(
+            "DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/clinton_tech"
         )
     }
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
