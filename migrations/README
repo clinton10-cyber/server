@@ -1,0 +1,6 @@
+Single-database configuration for Flask, managed with Flask-Migrate / Alembic.
+
+Note: the `media` bind (Media model, MEDIA_DATABASE_URL) is intentionally not
+tracked here since it's a separate physical database with a single simple
+table. It's created automatically at app startup — see db.create_all(bind_key="media")
+in app/__init__.py.
