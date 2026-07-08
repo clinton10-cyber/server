@@ -37,6 +37,13 @@ def create_app():
 
     from app.models import user, article, page, comment, media, ad, settings, engagement  # noqa
 
+    # The "media" bind lives in a separate physical database (MEDIA_DATABASE_URL)
+    # and isn't tracked by Alembic migrations, since it's a single simple table.
+    # This creates it automatically if it doesn't exist yet — safe/idempotent
+    # to run on every startup.
+    with app.app_context():
+        db.create_all(bind_key="media")
+
     from app.routes.main import main_bp
     from app.routes.auth import auth_bp
     from app.routes.admin import admin_bp
